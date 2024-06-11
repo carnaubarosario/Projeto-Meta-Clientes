@@ -1,0 +1,83 @@
+Quantidade_Clientes = DISTINCTCOUNT('public fato_faturamento'[cliente_id])
+
+ClientesComComprasAcimaZero_Abril = 
+CALCULATE(
+    DISTINCTCOUNT('public fato_faturamento'[cliente_id]),
+    FILTER(
+        'public fato_faturamento',
+        'public fato_faturamento'[fat_abr] > 0 
+    ) 
+) 
+
+ClientesComComprasAcimaZero_Maio = 
+CALCULATE(
+    DISTINCTCOUNT('public fato_faturamento'[cliente_id]),
+    FILTER(
+        'public fato_faturamento',
+        'public fato_faturamento'[fat_mai] > 0
+    ) 
+) 
+
+ClientesComComprasAcimaZero_Março = 
+CALCULATE(
+    DISTINCTCOUNT('public fato_faturamento'[cliente_id]),
+    FILTER(
+        'public fato_faturamento',
+        'public fato_faturamento'[fat_mar] > 0
+    ) 
+) 
+
+ClientesComComprasAcimaZero_Fev = 
+CALCULATE(
+    DISTINCTCOUNT('public fato_faturamento'[cliente_id]),
+    FILTER(
+        'public fato_faturamento',
+        'public fato_faturamento'[fat_fev] > 0
+    ) 
+) 
+
+ClientesComComprasAcimaZero_Jan = 
+CALCULATE(
+    DISTINCTCOUNT('public fato_faturamento'[cliente_id]),
+    FILTER(
+        'public fato_faturamento',
+        'public fato_faturamento'[fat_jan] > 0
+    ) 
+) 
+
+ClientesComComprasAcimaZero_Dez = 
+CALCULATE(
+    DISTINCTCOUNT('public fato_faturamento'[cliente_id]),
+    FILTER(
+        'public fato_faturamento',
+        'public fato_faturamento'[fat_dez] > 0 
+    ) 
+) 
+
+Meta de clientes com compra = 
+CALCULATE(
+    [ContagemClientesSemestre] * 0.85
+)
+
+ContagemClientesSemestre = 
+CALCULATE(
+    COUNTROWS('public fato_faturamento'),
+    FILTER(
+        'public fato_faturamento',
+        ('public fato_faturamento'[fat_jan] || 'public fato_faturamento'[fat_fev] || 'public fato_faturamento'[fat_mar] || 'public fato_faturamento'[fat_abr] || 'public fato_faturamento'[fat_mai] || 'public fato_faturamento'[fat_dez])
+    )
+)
+
+MetaClientes = COUNTROWS('public fato_faturamento') * 0.85
+
+Dif_PercDez = 'public fato_faturamento'[ClientesComComprasAcimaZero_Dez] / 'public fato_faturamento'[Quantidade_Clientes]
+Dif_PercJan = 'public fato_faturamento'[ClientesComComprasAcimaZero_Jan] / 'public fato_faturamento'[Quantidade_Clientes]
+Dif_PercFev = 'public fato_faturamento'[ClientesComComprasAcimaZero_Fev] / 'public fato_faturamento'[Quantidade_Clientes]
+Dif_PercMar = 'public fato_faturamento'[ClientesComComprasAcimaZero_Março] / 'public fato_faturamento'[Quantidade_Clientes]
+Dif_PercAbr = 'public fato_faturamento'[ClientesComComprasAcimaZero_Abril] / 'public fato_faturamento'[Quantidade_Clientes]
+Dif_PercMai = 'public fato_faturamento'[ClientesComComprasAcimaZero_Maio] / 'public fato_faturamento'[Quantidade_Clientes]
+
+TotalFaturado = 
+SUMX(
+    'public fato_faturamento',
+    'public fato_faturamento'[fat_dez] + 'public fato_faturamento'[fat_jan] + 'public fato_faturamento'[fat_fev] + 'public fato_faturamento'[fat_mar] + 'public fato_faturamento'[fat_abr] + 'public fato_faturamento'[fat_mai])

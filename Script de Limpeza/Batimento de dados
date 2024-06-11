@@ -1,0 +1,12 @@
+# Convertendo as colunas de faturamento para numérico
+meses = ['fat_mai', 'fat_abr', 'fat_mar', 'fat_fev', 'fat_jan', 'fat_dez']
+df[meses] = df[meses].apply(pd.to_numeric)
+
+# Procurando clientes com faturamento maior que 0 em cada mês
+clientes_faturamento_positivo = {}
+for mes in meses:
+    clientes_faturamento_positivo[mes] = df[(df[mes] > 0)]['RAZAO_SOCIAL'].tolist()
+
+# Imprimindo a quantidade de clientes com faturamento maior que 0 em cada mês
+for mes, clientes in clientes_faturamento_positivo.items():
+    print(f"Quantidade de clientes: {len(clientes)}")
